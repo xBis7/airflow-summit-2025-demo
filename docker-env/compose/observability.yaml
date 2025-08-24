@@ -13,8 +13,6 @@ services:
     volumes:
       - ./config/otel-config.yml:/etc/otel/config.yml
     command: ["--config", "/etc/otel/config.yml"]
-    networks:
-      - monitoring
     restart: always
 
   # Jaeger Service
@@ -32,8 +30,6 @@ services:
       - "34317:4317"
       - "34318:4318"
       - "39422:9422"
-    networks:
-      - monitoring
     restart: always
 
   # Prometheus Service
@@ -45,8 +41,6 @@ services:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-    networks:
-      - monitoring
     restart: always
 
   # Grafana Service
@@ -57,9 +51,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    networks:
-      - monitoring
     restart: always
