@@ -6,8 +6,7 @@ services:
     container_name: otel-collector
     hostname: otel-collector
     ports:
-      - "4317:4317"  # For gRPC (OTLP)
-      # - "4318:4318"
+      - "4317:4317"     # For gRPC (OTLP)
       - "24318:4318"    # OTLP http receiver
       - "28889:8889"    # Prometheus exporter metrics
     volumes:

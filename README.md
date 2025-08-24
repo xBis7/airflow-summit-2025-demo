@@ -22,6 +22,9 @@ https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index
 
 ```bash
 
+cd docker-env
+
+./handle_env.sh /path/to/projects
 ```
 
 
