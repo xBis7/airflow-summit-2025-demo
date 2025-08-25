@@ -16,24 +16,16 @@
 # under the License.
 from __future__ import annotations
 
+import pendulum
 import logging
-from datetime import datetime
 
 # from opentelemetry import trace
 
-from airflow import DAG
-from airflow.sdk import chain, task
+from airflow.sdk import chain, dag, task
 # from airflow.traces import otel_tracer
 # from airflow.traces.tracer import Trace
 
 logger = logging.getLogger("airflow.otel_test_dag")
-
-args = {
-    "owner": "airflow",
-    "start_date": datetime(2025, 10, 1),
-    "retries": 0,
-}
-
 
 @task
 def task1(ti):
@@ -84,10 +76,12 @@ def task2():
     logger.info("Task_2 finished.")
 
 
-with DAG(
-    "otel_test_dag",
-    default_args=args,
+@dag(
     schedule=None,
+    start_date=pendulum.datetime(2025, 10, 7, tz="UTC"),
     catchup=False,
-) as dag:
+)
+def otel_test_dag():
     chain(task1(), task2())  # type: ignore
+
+otel_test_dag()
