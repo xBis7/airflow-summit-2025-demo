@@ -27,5 +27,15 @@ cd docker-env
 ./handle_env.sh /path/to/projects
 ```
 
+## Useful commands
 
+```bash
+# Cleanup the env.
+docker compose down --volumes --remove-orphans
+
+# Initialize the db.
+docker compose up airflow-init
+
+
+```
 
