@@ -11,6 +11,8 @@ cd "$abs_path"/"$CURRENT_PROJECT"/docker-env/compose
 
 # The env variable is enough for docker compose to use the files.
 export COMPOSE_FILE="docker-compose.yaml:observability.yaml"
+export CURR_UID=$(id -u)
+export CURR_GID=$(id -g)
 
 if [[ "$action" == "start" ]]; then
   docker compose up -d
