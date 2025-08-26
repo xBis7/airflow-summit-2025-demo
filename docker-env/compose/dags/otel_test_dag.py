@@ -19,11 +19,13 @@ from __future__ import annotations
 import pendulum
 import logging
 
-# from opentelemetry import trace
+from opentelemetry import trace
 
 from airflow.sdk import chain, dag, task
-# from airflow.traces import otel_tracer
-# from airflow.traces.tracer import Trace
+from airflow.traces import otel_tracer
+from airflow.traces.tracer import Trace
+
+from pprint import pformat,pprint
 
 logger = logging.getLogger("airflow.otel_test_dag")
 
@@ -31,39 +33,58 @@ logger = logging.getLogger("airflow.otel_test_dag")
 def task1(ti):
     logger.info("Starting Task_1.")
 
-    # context_carrier = ti.context_carrier
+    context_carrier = ti.context_carrier
 
-    # otel_task_tracer = otel_tracer.get_otel_tracer_for_task(Trace)
-    # tracer_provider = otel_task_tracer.get_otel_tracer_provider()
+    otel_task_tracer = otel_tracer.get_otel_tracer_for_task(Trace)
+    tracer_provider = otel_task_tracer.get_otel_tracer_provider()
 
-    # if context_carrier is not None:
-    #     logger.info("Found ti.context_carrier: %s.", context_carrier)
-    #     logger.info("Extracting the span context from the context_carrier.")
-    #     parent_context = otel_task_tracer.extract(context_carrier)
-    #     with otel_task_tracer.start_child_span(
-    #         span_name="task1_sub_span1",
-    #         parent_context=parent_context,
-    #         component="dag",
-    #     ) as s1:
-    #         s1.set_attribute("attr1", "val1")
-    #         logger.info("From task sub_span1.")
+    if context_carrier is not None:
+        logger.info("Found ti.context_carrier: %s.", context_carrier)
+        logger.info("Extracting the span context from the context_carrier.")
+        parent_context = otel_task_tracer.extract(context_carrier)
+        with otel_task_tracer.start_child_span(
+            span_name="task1_sub_span1",
+            parent_context=parent_context,
+            component="dag",
+        ) as s1:
+            s1.set_attribute("attr1", "val1")
+            logger.info("From task sub_span1.")
 
-    #         with otel_task_tracer.start_child_span("task1_sub_span2") as s2:
-    #             s2.set_attribute("attr2", "val2")
-    #             logger.info("From task sub_span2.")
+            with otel_task_tracer.start_child_span("task1_sub_span2") as s2:
+                s2.set_attribute("attr2", "val2")
+                logger.info("From task sub_span2.")
 
-    #             tracer = trace.get_tracer("trace_test.tracer", tracer_provider=tracer_provider)
-    #             with tracer.start_as_current_span(name="task1_sub_span3") as s3:
-    #                 s3.set_attribute("attr3", "val3")
-    #                 logger.info("From task sub_span3.")
+                import requests
 
-    #     with otel_task_tracer.start_child_span(
-    #         span_name="task1_sub_span4",
-    #         parent_context=parent_context,
-    #         component="dag",
-    #     ) as s4:
-    #         s4.set_attribute("attr4", "val4")
-    #         logger.info("From task sub_span4.")
+                otel_tracer_provider = otel_task_tracer.get_otel_tracer_provider()
+
+                # If we want to hook up library instrumentation we have to connect the tracer provider like this
+                # It needs the instrumentation library to be installed though. 
+                from opentelemetry.instrumentation.requests import RequestsInstrumentor
+                RequestsInstrumentor().instrument(tracer_provider=otel_tracer_provider)
+
+                # If we don't set the parent context, it will get it like so
+                # trace.get_current_span().get_span_context()
+                # and then start_as_current_span()
+                # tracer.start_as_current_span(name="")
+                with otel_task_tracer.start_child_span(span_name="get_version") as ss:
+                    response = requests.get("https://api.github.com/users/xBis7/repos")
+                    logger.info("Response: %s", response.json())
+
+                    ss.set_attribute("test.version_response", pformat(response.json()))
+
+                tracer = trace.get_tracer("trace_test.tracer", tracer_provider=tracer_provider)
+                with tracer.start_as_current_span(name="task1_sub_span3") as s3:
+                    s3.set_attribute("attr3", "val3")
+                    logger.info("From task sub_span3.")
+
+        with otel_task_tracer.start_child_span(
+            span_name="task1_sub_span4",
+            parent_context=parent_context,
+            component="dag",
+        ) as s4:
+            s4.set_attribute("attr4", "val4")
+            logger.info("From task sub_span4.")
 
     logger.info("Task_1 finished.")
 
