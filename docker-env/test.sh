@@ -20,8 +20,9 @@ if [[ "$prepare_env" == "true" ]]; then
   docker compose down --volumes --remove-orphans
 
   # Initialize the db.
-  docker compose up airflow-init
+  # docker compose up airflow-init
 
+  cd "$abs_path"/"$CURRENT_PROJECT"/docker-env
   ./handle_env.sh "$abs_path"
 fi
 

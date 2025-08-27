@@ -1,31 +1,38 @@
 package com.example.demo.controllers;
 
+import com.example.demo.OtelProvider;
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class BaseController {
 
-  @GetMapping("/ping")
-  public Map<String, Object> ping() {
-    // Java agent will create a SERVER span and extract incoming context automatically.
-    doSubtask();
-    Span s = Span.current();
-    return Map.of(
-        "status", "ok",
-        "traceId", s.getSpanContext().getTraceId(),
-        "spanId", s.getSpanContext().getSpanId()
-    );
-  }
+  @GetMapping("/work")
+  public String work(HttpServletRequest request) {
+    OtelProvider otelProvider = new OtelProvider();
+    Tracer tracer = otelProvider.getTracer();
 
-  void doSubtask() {
-    try {
-      Thread.sleep(30);
-    } catch (InterruptedException ignored) {}
+    Context extracted = otelProvider.extractContext(request);
+    System.out.println("x: " + extracted);
+
+    Span serverSpan = tracer.spanBuilder("handle /work")
+                          .setSpanKind(SpanKind.SERVER)
+                          .setParent(extracted)
+                          .startSpan();
+
+    try (Scope s = serverSpan.makeCurrent()) {
+      serverSpan.setAttribute("http.route", "/work");
+      return "ok";
+    } finally {
+      serverSpan.end();
+    }
   }
 }

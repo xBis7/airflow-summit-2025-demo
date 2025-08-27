@@ -90,9 +90,16 @@ def task1(ti):
 
 
 @task
-def task2():
+def task2(ti):
     import requests;
-    print(requests.get('http://java-tester:7777/api/ping').json())
+
+    context_carrier = ti.context_carrier
+    print("Injected headers:", context_carrier)
+
+    r = requests.get("http://java-tester:7777/api/work", headers=context_carrier, timeout=5)
+    # print(requests.get('http://java-tester:7777/api/ping').json())
+
+    print("Status:", r.status_code, "Body:", r.text)
 
 
 
