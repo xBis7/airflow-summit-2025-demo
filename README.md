@@ -30,8 +30,13 @@ cd docker-env
 ## Useful commands
 
 ```bash
+cd docker-env/compose
+
 # Cleanup the env.
 docker compose down --volumes --remove-orphans
+
+export BUILD_TARGET="with-certs"
+docker compose build
 
 # Initialize the db.
 docker compose up airflow-init

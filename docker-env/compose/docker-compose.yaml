@@ -50,6 +50,7 @@ x-airflow-common:
     context: .
     dockerfile: Dockerfile.airflow
     target: ${BUILD_TARGET:-plain}
+  image: airflow-custom:${IMAGE_TAG:-latest}
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
