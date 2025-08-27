@@ -1,16 +1,19 @@
 
 services:
   java-tester:
-    image: gradle:8.12.0-jdk17
+    image: maven:3.6.3-openjdk-17
     container_name: java-tester
     hostname: java-tester
-    working_dir: /app/testing/partial-spans
+    working_dir: /app
     volumes:
-      - ../otel-java-test:/app/testing/partial-spans/otel-java-test
-      - ../../../opentelemetry-java:/app/opentelemetry-java
-    command: [ "tail", "-f", "/dev/null" ]
-    environment:
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://${OTEL_COLLECTOR_HOSTNAME}:4317"
-    depends_on:
-      - ${OTEL_COLLECTOR_HOSTNAME}
+      - ../../demo/target:/app/target
+    command: ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
 
+  # python-tester:
+  #   image: python:3.10
+  #   container_name: python-tester
+  #   hostname: python-tester
+  #   working_dir: /app
+  #   volumes:
+  #     - ./test_api.py:/app/test_api.py
+  #   command: [ "tail", "-f", "/dev/null" ]

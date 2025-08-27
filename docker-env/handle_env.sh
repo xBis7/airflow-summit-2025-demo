@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
+source "./lib.sh"
+
 set -e
 
 abs_path=$1
 action=${2:-"start"}
 with_certs=${3:-"-"}
 
-CURRENT_PROJECT="airflow-summit-2025-demo"
-
 cd "$abs_path"/"$CURRENT_PROJECT"/docker-env/compose
 
 # The env variable is enough for docker compose to use the files.
-export COMPOSE_FILE="docker-compose.yaml:observability.yaml"
+export COMPOSE_FILE="docker-compose.yaml:observability.yaml:testers.yaml"
 export CURR_UID=$(id -u)
 export CURR_GID=$(id -g)
 

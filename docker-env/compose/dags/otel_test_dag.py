@@ -91,10 +91,9 @@ def task1(ti):
 
 @task
 def task2():
-    logger.info("Starting Task_2.")
-    for i in range(3):
-        logger.info("Task_2, iteration '%d'.", i)
-    logger.info("Task_2 finished.")
+    import requests;
+    print(requests.get('http://java-tester:7777/api/ping').json())
+
 
 
 @dag(

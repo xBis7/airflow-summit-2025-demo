@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "./lib.sh"
+
 set -e
 
 abs_path=$1
@@ -7,6 +9,13 @@ prepare_env=$2
 
 
 if [[ "$prepare_env" == "true" ]]; then
+
+  cd "$abs_path"/"$CURRENT_PROJECT"/demo
+
+  mvn clean install
+
+  cd "$abs_path"/"$CURRENT_PROJECT"/docker-env/compose
+
   # Cleanup old data.
   docker compose down --volumes --remove-orphans
 
