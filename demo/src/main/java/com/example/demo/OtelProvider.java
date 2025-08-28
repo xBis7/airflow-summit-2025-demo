@@ -9,6 +9,8 @@ import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.TextMapGetter;
 import io.opentelemetry.context.propagation.TextMapSetter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -53,9 +55,14 @@ public class OtelProvider {
   public Tracer getTracer() {
     SpanExporter exporter;
 
-    OtlpGrpcSpanExporterBuilder grpcSpanExporterBuilder = OtlpGrpcSpanExporter.builder();
-    exporter = grpcSpanExporterBuilder
-                   .setEndpoint("http://otel-collector:4318")
+//    OtlpGrpcSpanExporterBuilder grpcSpanExporterBuilder = OtlpGrpcSpanExporter.builder();
+//    exporter = grpcSpanExporterBuilder
+//                   .setEndpoint("http://otel-collector:4318")
+//                   .build();
+
+    OtlpHttpSpanExporterBuilder httpSpanExporterBuilder = OtlpHttpSpanExporter.builder();
+    exporter = httpSpanExporterBuilder
+                   .setEndpoint("http://otel-collector:4318/v1/traces")
                    .build();
 
     // 1. Create a Resource with the service name

@@ -16,9 +16,31 @@
 
 	<properties>
 		<java.version>17</java.version>
-    <spring.boot.version>3.5.5</spring.boot.version>
-    <otel.version>1.53.0</otel.version>
+   		<spring.boot.version>3.5.5</spring.boot.version>
+    	<otel.version>1.53.0</otel.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Core stable modules -->
+			<dependency>
+				<groupId>io.opentelemetry</groupId>
+				<artifactId>opentelemetry-bom</artifactId>
+				<version>1.53.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Alpha modules (exporter-otlp-common, sender-okhttp, autoconfigure-spi, etc.) -->
+			<dependency>
+				<groupId>io.opentelemetry</groupId>
+				<artifactId>opentelemetry-bom-alpha</artifactId>
+				<version>1.53.0-alpha</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 
@@ -34,26 +56,23 @@
 			<scope>test</scope>
 		</dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 
-    <!-- Otel -->
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-api</artifactId>
-      <version>${otel.version}</version>
-    </dependency>
+		<!-- Otel -->
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-sdk</artifactId>
-			<version>${otel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-exporter-otlp</artifactId>
-			<version>${otel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry.semconv</groupId>
