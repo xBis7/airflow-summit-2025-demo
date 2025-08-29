@@ -21,18 +21,21 @@ public class BaseController {
     Tracer tracer = otelProvider.getTracer();
 
     Context extracted = otelProvider.extractContext(request);
-    System.out.println("x: " + extracted);
 
-    Span serverSpan = tracer.spanBuilder("handle /work")
-                          .setSpanKind(SpanKind.SERVER)
-                          .setParent(extracted)
-                          .startSpan();
+    Span span = tracer.spanBuilder("Api work")
+            .setSpanKind(SpanKind.SERVER)
+            .setParent(extracted)
+            .startSpan();
 
-    try (Scope s = serverSpan.makeCurrent()) {
-      serverSpan.setAttribute("http.route", "/work");
+    try (Scope scope = span.makeCurrent()) {
+      span.setAttribute("http.route", "/work");
+      // Some work.
+      Thread.sleep(10000);
       return "ok";
+    } catch (InterruptedException e) {
+        throw new RuntimeException(e);
     } finally {
-      serverSpan.end();
+      span.end();
     }
   }
 }

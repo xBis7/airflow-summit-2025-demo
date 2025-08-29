@@ -96,7 +96,7 @@ def task2(ti):
     context_carrier = ti.context_carrier
     print("Injected headers:", context_carrier)
 
-    r = requests.get("http://java-tester:7777/api/work", headers=context_carrier, timeout=5)
+    r = requests.get("http://java-tester:7777/api/work", headers=context_carrier, timeout=25)
     # print(requests.get('http://java-tester:7777/api/ping').json())
 
     print("Status:", r.status_code, "Body:", r.text)
