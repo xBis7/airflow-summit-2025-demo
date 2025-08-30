@@ -6,7 +6,6 @@ set -e
 
 abs_path=$1
 action=${2:-"start"}
-with_certs=${3:-"-"}
 
 cd "$abs_path"/"$CURRENT_PROJECT"/docker-env/compose
 
@@ -14,10 +13,6 @@ cd "$abs_path"/"$CURRENT_PROJECT"/docker-env/compose
 export COMPOSE_FILE="docker-compose.yaml:observability.yaml:testers.yaml"
 export CURR_UID=$(id -u)
 export CURR_GID=$(id -g)
-
-if [[ "$with_certs" != "-" ]]; then
-  export BUILD_TARGET="with-certs"
-fi
 
 if [[ "$action" == "start" ]]; then
   docker compose up -d

@@ -49,7 +49,6 @@ x-airflow-common:
   build:
     context: .
     dockerfile: Dockerfile.airflow
-    target: ${BUILD_TARGET:-plain}
   image: airflow-custom:${IMAGE_TAG:-latest}
   environment:
     &airflow-common-env

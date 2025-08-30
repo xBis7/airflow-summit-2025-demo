@@ -97,7 +97,6 @@ def task2(ti):
     print("Injected headers:", context_carrier)
 
     r = requests.get("http://java-tester:7777/api/work", headers=context_carrier, timeout=25)
-    # print(requests.get('http://java-tester:7777/api/ping').json())
 
     print("Status:", r.status_code, "Body:", r.text)
 
@@ -109,6 +108,6 @@ def task2(ti):
     catchup=False,
 )
 def otel_test_dag():
-    chain(task1(), task2())  # type: ignore
+    chain(task1(), task2())
 
 otel_test_dag()

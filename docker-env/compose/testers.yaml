@@ -9,11 +9,3 @@ services:
       - ../../demo/target:/app/target
     command: ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
 
-  # python-tester:
-  #   image: python:3.10
-  #   container_name: python-tester
-  #   hostname: python-tester
-  #   working_dir: /app
-  #   volumes:
-  #     - ./test_api.py:/app/test_api.py
-  #   command: [ "tail", "-f", "/dev/null" ]
