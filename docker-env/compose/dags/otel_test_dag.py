@@ -104,18 +104,19 @@ def task2(ti):
     logger.info("Starting Task_2.")
 
     context_carrier = ti.context_carrier
-    logger.info("Injected headers: ", context_carrier)
+    logger.info("Injected headers: " + str(context_carrier))
+
     # Some remote request with the context injected into the headers.
     res = requests.get("http://java-tester:7777/api/work", headers=context_carrier, timeout=25)
 
-    logger.info("Status: ", res.status_code, "Body: ", res.text)
+    logger.info("\n\tStatus: " + str(res.status_code) + "\n\tBody: " + str(res.text))
     
     logger.info("Task_2 finished.")
 
 
 @dag(
     schedule=None,
-    start_date=pendulum.datetime(2025, 10, 7, tz="UTC"),
+    start_date=pendulum.datetime(2025, 8, 30, tz="UTC"),
     catchup=False,
 )
 def otel_test_dag():

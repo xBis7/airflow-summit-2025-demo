@@ -37,6 +37,7 @@ cd ..
 # or to just start the environment, run
 # ./handle_env.sh /path/to/projects
 
+-> Trigger the DagRun from the airflow UI or run
 ./test.sh
 
 -> check the airflow UI
