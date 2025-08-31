@@ -11,7 +11,7 @@ start_env=$2
 cd "$abs_path"/"$CURRENT_PROJECT"/docker-env
 ./handle_env.sh "$abs_path" "stop"
 
-cd "$abs_path"/"$CURRENT_PROJECT"/demo
+cd "$abs_path"/"$CURRENT_PROJECT"/"$SPRING_BOOT_APP"
 
 mvn clean install
 

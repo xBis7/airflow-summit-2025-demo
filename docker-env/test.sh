@@ -10,7 +10,7 @@ prepare_env=$2
 
 if [[ "$prepare_env" == "true" ]]; then
 
-  cd "$abs_path"/"$CURRENT_PROJECT"/demo
+  cd "$abs_path"/"$CURRENT_PROJECT"/"$SPRING_BOOT_APP"
 
   mvn clean install
 

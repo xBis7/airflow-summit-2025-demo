@@ -29,7 +29,7 @@ cd docker-env/compose
 docker compose down --volumes --remove-orphans
 
 # Go to 'docker-env'.
-cd ..
+cd ../
 
 # This will build the java project and start the docker environment.
 ./setup_java_demo.sh /path/to/projects true

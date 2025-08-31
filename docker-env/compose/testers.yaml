@@ -6,6 +6,6 @@ services:
     hostname: java-tester
     working_dir: /app
     volumes:
-      - ../../demo/target:/app/target
+      - ../../demo-spring-boot-service/target:/app/target
     command: ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
 
