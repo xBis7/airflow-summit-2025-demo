@@ -45,5 +45,8 @@ cd ../
 -> check the Jaeger UI
     |_ Service: Airflow
     |_ Operation: otel_test_dag
+
+# Stop the docker env.
+./handle_env.sh /path/to/projects stop
 ```
 
