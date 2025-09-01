@@ -1,4 +1,31 @@
-FROM apache/airflow:3.0.5-python3.10
+FROM apache/airflow:3.0.5-python3.10 AS base
+
+
+FROM base AS with-certs
+
+USER root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+COPY ./certs/ /usr/local/share/ca-certificates/
+RUN chmod 644 /usr/local/share/ca-certificates/*
+RUN update-ca-certificates --fresh
+
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+USER airflow
+
+# Install OpenTelemetry SDK and other packages
+RUN pip install \
+    opentelemetry-sdk \
+    opentelemetry-api \
+    opentelemetry-instrumentation \
+    opentelemetry-exporter-otlp \
+    opentelemetry-instrumentation-requests
+
+FROM base AS plain
 
 USER airflow
 
