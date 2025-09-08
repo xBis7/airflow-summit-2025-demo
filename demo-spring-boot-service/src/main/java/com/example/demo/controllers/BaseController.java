@@ -20,14 +20,14 @@ public class BaseController {
     OtelProvider otelProvider = new OtelProvider();
     Tracer tracer = otelProvider.getTracer();
 
-    Context extracted = otelProvider.extractContext(request);
+    Context extractedCtx = otelProvider.extractContext(request);
 
     Span span = tracer.spanBuilder("Api work")
             .setSpanKind(SpanKind.SERVER)
-            .setParent(extracted)
+            .setParent(extractedCtx)
             .startSpan();
 
-    try (Scope scope = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       span.setAttribute("http.route", "/work");
       // Some work.
       Thread.sleep(10000);
