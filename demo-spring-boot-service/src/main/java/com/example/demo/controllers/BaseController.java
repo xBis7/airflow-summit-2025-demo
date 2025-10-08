@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class BaseController {
 
+  private final OtelProvider otelProvider;
+
+  // Code-injection.
+  public BaseController(OtelProvider otelProvider) {
+    this.otelProvider = otelProvider;
+  }
+
   @GetMapping("/work")
   public String work(HttpServletRequest request) {
-    OtelProvider otelProvider = new OtelProvider();
     Tracer tracer = otelProvider.getTracer();
 
     Context extractedCtx = otelProvider.extractContext(request);
