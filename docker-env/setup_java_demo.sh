@@ -17,6 +17,6 @@ mvn clean install
 
 if [[ "$start_env" == "true" ]]; then
   cd "$abs_path"/"$CURRENT_PROJECT"/docker-env
-  ./handle_env.sh "$abs_path"
+  ./handle_env.sh "$abs_path" start true
 fi
 
