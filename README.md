@@ -32,6 +32,7 @@ docker compose down --volumes --remove-orphans
 cd ../
 
 # This will build the java project and start the docker environment.
+# '/path/to/projects' will be the path to the parent directory of this repo.
 ./setup_java_demo.sh /path/to/projects true
 
 # or to just start the environment, run
